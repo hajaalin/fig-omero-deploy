@@ -1,0 +1,13 @@
+---
+- name: install Docker Python client
+  pip: name=docker-py
+- name: load fresh OMERO images from Docker Hub
+  docker_image: name={{ item }} state=present
+  with_items:
+    - hajaalin/omero-base:5.1
+    - hajaalin/omero:5.1
+    - hajaalin/omero-web:5.1
+
+# prepare directory for PostgreSQL
+
+# template compose.yml
