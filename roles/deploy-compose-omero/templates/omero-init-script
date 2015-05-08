@@ -1,0 +1,44 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: {{ service_name }}
+# Required-Start: $local_fs $network $named $time $syslog docker
+# Required-Stop: $local_fs $network $named $time $syslog docker
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Description: <DESCRIPTION>
+### END INIT INFO
+
+DEPLOY_DIR="{{ deploy_dir }}"
+PROJECT="{{ project_name }}"
+
+START="cd ${DEPLOY_DIR}; . make_env.sh; docker-compose -d -p $PROJECT up"
+STOP="cd ${DEPLOY_DIR}; . make_env.sh; docker-compose -p $PROJECT stop"
+
+start() {
+echo 'Starting service…' >&2
+$START
+echo 'Service started' >&2
+}
+
+stop() {
+echo 'Stopping service…' >&2
+$STOP
+echo 'Service stopped' >&2
+}
+
+case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+stop
+start
+;;
+*)
+echo "Usage: $0 {start|stop|restart}"
+esac
+
+

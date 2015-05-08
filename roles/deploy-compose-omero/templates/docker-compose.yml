@@ -1,0 +1,49 @@
+db:
+  image: hajaalin/omero-postgres:{{ compose_omero_tag }}
+  environment:
+    POSTGRES_PASSWORD:
+    DB_PASSWORD_OMERO:
+    OMERO_ROOT_PASSWORD:
+  volumes:
+   - {{ volume_pg_dump }}:/pg_dump:rw
+
+omero:
+  image: hajaalin/omero-hyldap:{{ compose_omero_tag }}
+  environment:
+    DB_PASSWORD_OMERO:
+    OMERO_TRUSTSTORE_PASSWORD:
+    LDAP_HOST: "{{ ldap_host }}"
+    LDAP_PORT: "{{ ldap_port }}"
+  links:
+   - db
+  expose: 
+   - "4064"
+  volumes:
+   - {{ volume_data_omero }}:/data/OMERO
+  ports:
+   - "{{ host_port_omero1 }}:4063"
+   - "{{ host_port_omero2 }}:4064"
+
+omeroweb:
+  image: hajaalin/omero-web:{{ compose_omero_tag }}
+  links:
+   - omero
+  expose:
+   - "4080"
+
+nginx:
+  image: hajaalin/omero-nginx:{{ compose_omero_tag }}
+  links:
+   - omeroweb
+  volumes_from:
+   - omeroweb
+  volumes:
+   - {{ deploy_dir }}/nginx_auth:/etc/nginx/auth
+  environment:
+    VIRTUAL_HOST: "{{ virtual_host }}" 
+    VIRTUAL_PROTO: "https"
+    VIRTUAL_PORT: 443
+#  ports:
+#   - "8080:80"
+#   - "8443:443"
+

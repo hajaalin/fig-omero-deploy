@@ -1,0 +1,35 @@
+---
+# vars file for roles/deploy-compose-omero
+
+app_name: "omero"
+compose_omero_tag: "5.1"
+
+# name to use for init script
+service_name: "{{ app_name }}_{{ compose_omero_tag }}"
+
+# name to use for Docker containers
+project_name: "{{ service_name }}"
+
+# directory where docker-compose.yml etc will be stored
+deploy_dir: "/opt/deploy/{{ service_name }}"
+
+
+
+# db
+volume_pg_dump: "/home/omero/data/pg_dump"
+
+
+# omero
+ldap_host: "ldap-internal.it.helsinki.fi"
+ldap_port: 636
+volume_data_omero: "/home/omero/data/OMERO"
+host_port_omero1: 4063
+host_port_omero2: 4064
+
+
+# nginx
+cert_subject: "/C=FI/ST=Uusimaa/L=Helsinki/O=University of Helsinki/CN={{ ansible_fqdn }}"
+virtual_host: "omero.csc-lmu-ubuntu.biocenter.helsinki.fi"
+cert_dir: "/etc/nginx-proxy/certs"
+cert_file: "{{ cert_dir }}/{{ virtual_host }}.crt"
+key_file: "{{ cert_dir }}/{{ virtual_host }}.key"

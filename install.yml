@@ -1,10 +1,10 @@
 ---
 
-- hosts: all
+- hosts: csc-lmu
   sudo: yes
   roles:
     - franklinkim.docker-compose
-    - omero
+    - deploy-compose-omero
   vars: 
     docker_compose_version: 1.1.0
 

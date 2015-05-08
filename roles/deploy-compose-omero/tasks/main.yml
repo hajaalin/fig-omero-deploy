@@ -1,0 +1,28 @@
+---
+# tasks file for roles/deploy-compose-omero
+
+- name: create deployment directory and subdir for certs
+  file: path={{ deploy_dir }}/nginx_auth state=directory
+
+- name: clone secrets
+  template: src=secrets.ejson dest={{ deploy_dir }}/secrets.ejson
+
+- name: clone env script 
+  file: src=make_env.sh dest={{ deploy_dir }}/make_env.sh
+
+- name: install init script
+  template: src=omero-init-script 
+            dest=/etc/init.d/{{ service_name }} 
+            backup=yes 
+            mode=0755
+
+- name: create self-signed SSL cert for Nginx
+  command: openssl req -new -nodes -x509 -subj "{{ cert_subject }}" -days 3650 -keyout {{ deploy_dir }}/nginx_auth/server.key -out {{ deploy_dir }}/nginx_auth/server.crt -extensions v3_ca creates={{ deploy_dir }}/nginx_auth/server.crt
+
+- name: copy key for nginx-proxy
+  command: cp {{ deploy_dir }}/nginx_auth/server.key {{ key_file }}
+
+- name: copy certificate for nginx-proxy
+  command: cp {{ deploy_dir }}/nginx_auth/server.crt {{ cert_file }}
+
+
