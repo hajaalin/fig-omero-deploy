@@ -23,8 +23,10 @@ volume_pg_dump: "/home/omero/data/pg_dump"
 ldap_host: "ldap-internal.it.helsinki.fi"
 ldap_port: 636
 volume_data_omero: "/home/omero/data/OMERO"
-host_port_omero1: 4063
-host_port_omero2: 4064
+#host_port_omero1: 4063
+#host_port_omero2: 4064
+host_port_omero1: 4065
+host_port_omero2: 4066
 
 
 # nginx

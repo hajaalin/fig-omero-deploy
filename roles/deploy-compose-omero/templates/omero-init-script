@@ -11,18 +11,24 @@
 DEPLOY_DIR="{{ deploy_dir }}"
 PROJECT="{{ project_name }}"
 
-START="cd ${DEPLOY_DIR}; . make_env.sh; docker-compose -d -p $PROJECT up"
-STOP="cd ${DEPLOY_DIR}; . make_env.sh; docker-compose -p $PROJECT stop"
+ENV_FILE="${DEPLOY_DIR}/make_env.sh"
+COMPOSE="${DEPLOY_DIR}/docker-compose.yml"
+
+START=". ${ENV_FILE} ; docker-compose -f $COMPOSE -p $PROJECT up"
+STOP=". ${ENV_FILE} ; docker-compose -f $COMPOSE -p $PROJECT stop"
+
+RUNAS=root
 
 start() {
 echo 'Starting service…' >&2
-$START
+echo "$START" >&2
+su -c "$START" $RUNAS
 echo 'Service started' >&2
 }
 
 stop() {
 echo 'Stopping service…' >&2
-$STOP
+su -c "$STOP" $RUNAS
 echo 'Service stopped' >&2
 }
 

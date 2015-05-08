@@ -8,12 +8,15 @@
   template: src=secrets.ejson dest={{ deploy_dir }}/secrets.ejson
 
 - name: clone env script 
-  file: src=make_env.sh dest={{ deploy_dir }}/make_env.sh
+  template: src=make_env.sh dest={{ deploy_dir }}/make_env.sh
+
+- name: clone compose file
+  template: src=docker-compose.yml dest={{ deploy_dir }}/docker-compose.yml
 
 - name: install init script
   template: src=omero-init-script 
             dest=/etc/init.d/{{ service_name }} 
-            backup=yes 
+            backup=no 
             mode=0755
 
 - name: create self-signed SSL cert for Nginx
@@ -25,4 +28,6 @@
 - name: copy certificate for nginx-proxy
   command: cp {{ deploy_dir }}/nginx_auth/server.crt {{ cert_file }}
 
+- name: start service
+  service: name={{ service_name }} state=restarted
 
