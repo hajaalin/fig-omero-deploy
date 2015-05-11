@@ -19,6 +19,7 @@ omero:
   expose: 
    - "4064"
   volumes:
+   - {{ deploy_dir }}/hyldapConfig.xml:/home/omero/hyldapConfig.xml
    - {{ volume_data_omero }}:/data/OMERO
   ports:
    - "{{ host_port_omero1 }}:4063"

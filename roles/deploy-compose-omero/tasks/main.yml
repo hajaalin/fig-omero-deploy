@@ -10,6 +10,9 @@
 - name: clone env script 
   template: src=make_env.sh dest={{ deploy_dir }}/make_env.sh
 
+- name: clone hyldapConfig.xml
+  template: src=hyldapConfig.xml dest={{ deploy_dir }}/hyldapConfig.xml
+
 - name: clone compose file
   template: src=docker-compose.yml dest={{ deploy_dir }}/docker-compose.yml
 
