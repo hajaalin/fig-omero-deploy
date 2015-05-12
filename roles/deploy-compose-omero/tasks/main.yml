@@ -4,18 +4,24 @@
 - name: create deployment directory and subdir for certs
   file: path={{ deploy_dir }}/nginx_auth state=directory
 
-- name: clone secrets
-  template: src=secrets.ejson dest={{ deploy_dir }}/secrets.ejson
+- name: clone deployment files
+  template: src={{ item }} dest={{ deploy_dir }}/{{ item }}
+  with_items:
+    - secrets.ejson
+    - make_env.sh
+    - hyldapConfig.xml
+    - docker-compose.yml
 
-- name: clone env script 
-  template: src=make_env.sh dest={{ deploy_dir }}/make_env.sh
+- name: install Python bindings to libxml
+  apt: name=python-lxml state=present
 
-- name: clone hyldapConfig.xml
-  template: src=hyldapConfig.xml dest={{ deploy_dir }}/hyldapConfig.xml
-
-- name: clone compose file
-  template: src=docker-compose.yml dest={{ deploy_dir }}/docker-compose.yml
-
+- name: edit hyldapConfig.xml
+  xml: 
+    file: "{{ deploy_dir }}/hyldapConfig.xml"
+    xpath: "/hyldapconfig"
+    pretty_print: True
+    add_children: "{{ allowed_groups }}"
+ 
 - name: install init script
   template: src=omero-init-script 
             dest=/etc/init.d/{{ service_name }} 
