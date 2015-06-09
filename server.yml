@@ -1,0 +1,13 @@
+---
+
+- hosts: csc_lmu
+  sudo: yes
+  roles:
+    - franklinkim.docker-compose
+  vars: 
+    docker_compose_version: 1.2.0
+
+  tasks:
+    - name: install Python bindings to libxml
+      apt: name=python-lxml state=present
+
