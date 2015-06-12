@@ -1,4 +1,4 @@
-SECRETS="{{ deploy_dir }}/secrets.ejson"
+SECRETS="{{ deploy_root }}/shared/secrets.ejson"
 
 # POSTGRES_PASSWORD is used by the official PostgreSQL image
 # This is needed to start the database.

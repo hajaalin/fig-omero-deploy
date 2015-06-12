@@ -8,14 +8,17 @@
 # Description: <DESCRIPTION>
 ### END INIT INFO
 
-DEPLOY_DIR="{{ deploy_dir }}"
+SHARED_DIR="{{ deploy_root }}/shared"
+DEPLOY_DIR="{{ deploy_root }}/releases/{{ docker_tag }}"
 PROJECT="{{ project_name }}"
 
-ENV_FILE="${DEPLOY_DIR}/make_env.sh"
+ENV_FILE="${SHARED_DIR}/make_env.sh"
 COMPOSE="${DEPLOY_DIR}/docker-compose.yml"
 
-START=". ${ENV_FILE} ; docker-compose -f $COMPOSE -p $PROJECT up"
-STOP=". ${ENV_FILE} ; docker-compose -f $COMPOSE -p $PROJECT stop"
+CMDBASE=". ${ENV_FILE} ; docker-compose -f $COMPOSE -p $PROJECT"
+START="${CMDBASE} up -d"
+STARTDB="${CMDBASE} up initdb; ${CMDBASE} up -d db"
+STOP="${CMDBASE} stop"
 
 RUNAS=root
 
@@ -24,6 +27,13 @@ echo 'Starting service…' >&2
 echo "$START" >&2
 su -c "$START" $RUNAS
 echo 'Service started' >&2
+}
+
+startdb() {
+echo 'Starting database…' >&2
+echo "$STARTDB" >&2
+su -c "$STARTDB" $RUNAS
+echo 'Database started' >&2
 }
 
 stop() {
@@ -36,6 +46,9 @@ case "$1" in
 start)
 start
 ;;
+startdb)
+startdb
+;;
 stop)
 stop
 ;;
@@ -44,7 +57,7 @@ stop
 start
 ;;
 *)
-echo "Usage: $0 {start|stop|restart}"
+echo "Usage: $0 {start|startdb|stop|restart}"
 esac
 
 

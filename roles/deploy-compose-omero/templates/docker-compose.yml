@@ -1,14 +1,22 @@
+initdb:
+  image: hajaalin/omero-initdb:{{ docker_tag }}
+  environment:
+    OMERO_ROOT_PASSWORD:
+
 db:
-  image: hajaalin/omero-postgres:{{ compose_omero_tag }}
+  image: hajaalin/omero-postgres:{{ docker_tag }}
   environment:
     POSTGRES_PASSWORD:
     DB_PASSWORD_OMERO:
     OMERO_ROOT_PASSWORD:
   volumes:
+   - {{ volume_pgsql }}:/var/lib/postgresql/data:rw
    - {{ volume_pg_dump }}:/pg_dump:rw
+  volumes_from:
+   - initdb
 
 omero:
-  image: hajaalin/omero-hyldap:{{ compose_omero_tag }}
+  image: hajaalin/omero-hyldap:{{ docker_tag }}
   environment:
     DB_PASSWORD_OMERO:
     OMERO_TRUSTSTORE_PASSWORD:
@@ -19,27 +27,28 @@ omero:
   expose: 
    - "4064"
   volumes:
-   - {{ deploy_dir }}/hyldapConfig.xml:/home/omero/hyldapConfig.xml
+   - {{ deploy_root }}/shared/hyldapConfig.xml:/home/omero/hyldapConfig.xml
    - {{ volume_data_omero }}:/data/OMERO
   ports:
    - "{{ host_port_omero1 }}:4063"
    - "{{ host_port_omero2 }}:4064"
 
 omeroweb:
-  image: hajaalin/omero-web:{{ compose_omero_tag }}
+  image: hajaalin/omero-web:{{ docker_tag }}
   links:
    - omero
   expose:
    - "4080"
 
 nginx:
-  image: hajaalin/omero-nginx:{{ compose_omero_tag }}
+  image: hajaalin/omero-nginx:{{ docker_tag }}
   links:
    - omeroweb
   volumes_from:
    - omeroweb
   volumes:
-   - {{ deploy_dir }}/nginx_auth:/etc/nginx/auth
+   - {{ key_file }}:/etc/nginx/auth/server.key
+   - {{ cert_file }}:/etc/nginx/auth/server.crt
   environment:
     VIRTUAL_HOST: "{{ virtual_host }}" 
     VIRTUAL_PROTO: "https"
