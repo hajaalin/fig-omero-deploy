@@ -1,0 +1,9 @@
+---
+
+- hosts: csc_lmu
+  sudo: yes
+  roles:
+    - shutdown-current-release 
+    - deploy-compose-omero
+
+
