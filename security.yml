@@ -1,0 +1,7 @@
+---
+
+- hosts: csc_lmu
+  sudo: yes
+  roles:
+    - security_bench
+
