@@ -1,2 +1,6 @@
-[omero_hosts]
+[omero_hosts_hy]
 csc-lmu-ubuntu.biocenter.helsinki.fi
+
+[omero_hosts:children]
+omero_hosts_hy
+

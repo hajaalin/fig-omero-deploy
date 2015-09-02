@@ -1,2 +1,6 @@
-[omero_hosts]
+[omero_hosts_hy]
 omerovm-2.it.helsinki.fi
+
+[omero_hosts:children]
+omero_hosts_hy
+
