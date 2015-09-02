@@ -8,6 +8,6 @@ allowed_groups:
     - group: { ldapname: 'uid=grp-A91900-bi-vart,ou=alma_workgroups,ou=groups,o=hy', omename: 'BI-Vartiainen' }
     - group: { ldapname: 'uid=grp-A34520-biu,ou=alma_workgroups,ou=groups,o=hy', omename: 'BIU' }
     - group: { ldapname: 'uid=grp-A91900-bi-em,ou=alma_workgroups,ou=groups,o=hy', omename: 'BI-EM' }
-    - group: { ldapname: 'uid=grp-A34550-kidney,ou=alma_workgroups,ou=groups,o=hy ', omename: 'Sariola' }
+    - group: { ldapname: 'uid=grp-A34550-kidney,ou=alma_workgroups,ou=groups,o=hy', omename: 'Sariola' }
 #    - group: { ldapname: '', omename: '' }
 #    - group: { ldapname: '', omename: '' }
