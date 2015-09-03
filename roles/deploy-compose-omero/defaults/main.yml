@@ -1,4 +1,0 @@
----
-# defaults file for roles/deploy-compose-omero
-
-deploy_root: "/opt/deploy/OMERO"
