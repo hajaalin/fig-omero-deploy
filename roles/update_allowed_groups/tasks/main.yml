@@ -1,0 +1,12 @@
+---
+# tasks file for roles/update_allowed_groups
+
+- name: edit hyldapConfig.xml
+  xml:
+    file: "{{ deploy_root }}/shared/hyldapConfig.xml"
+    xpath: "/hyldapconfig"
+    pretty_print: True
+    add_children: "{{ allowed_groups }}"
+
+- name: restart OMERO service
+  service: name={{ service_name }} state=restarted

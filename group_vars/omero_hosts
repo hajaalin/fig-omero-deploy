@@ -1,0 +1,35 @@
+---
+# vars file for omero_hosts
+
+app_name: "omero"
+compose_omero_tag: "ansible"
+
+# name to use for init script
+service_name: "{{ app_name }}_{{ compose_omero_tag }}"
+
+# name to use for Docker containers
+project_name: "{{ service_name }}"
+
+# directory where docker-compose.yml etc will be stored
+deploy_root: "/opt/deploy/{{ service_name }}"
+
+# key and certificate are first created here:
+cert_dir: "/etc/nginx-proxy/certs"
+cert_file: "{{ cert_dir }}/{{ virtual_host }}.crt"
+key_file: "{{ cert_dir }}/{{ virtual_host }}.key"
+
+# and then they are copied or linked here:
+key_link: "{{ deploy_root }}/shared/nginx_auth/server.key"
+cert_link: "{{ deploy_root }}/shared/nginx_auth/server.crt"
+
+
+# db volumes
+#volume_pgsql: "/home/omero/data/pgsql"
+#volume_pg_dump: "/home/omero/data/pg_dump"
+
+# OMERO data volume
+#volume_data_omero: "/home/omero/data/OMERO"
+
+# OMERO ports
+host_port_omero1: 4063
+host_port_omero2: 4064

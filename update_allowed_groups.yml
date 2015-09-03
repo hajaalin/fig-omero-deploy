@@ -1,0 +1,7 @@
+---
+
+- hosts: omero_hosts
+  sudo: yes
+  roles:
+    - update_allowed_groups
+    #- { role: deploy-compose-omero, tags: [ 'update_allowed_groups' ] }
