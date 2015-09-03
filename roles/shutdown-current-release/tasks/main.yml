@@ -1,11 +1,10 @@
 ---
 # tasks file for roles/shutdown_current_release
 - name: shutdown current OMERO server (not the database)
-  service: name={{ omero_service_name }} arguments=stop_server
+  service: name={{ service_name }} arguments=stop_server
 
 - name: backup current OMERO database
-  service: name={{ omero_service_name }} arguments=dump_db
+  service: name={{ service_name }} arguments=dump_db
 
 - name: stop current OMERO database
-  service: name={{ omero_service_name }} state=stopped
-
+  service: name={{ service_name }} state=stopped

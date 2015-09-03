@@ -1,0 +1,15 @@
+---
+
+virtual_host: "omero.csc-lmu-ubuntu.biocenter.helsinki.fi"
+
+
+# db volumes
+volume_pgsql: "/home/omero/data/pgsql"
+volume_pg_dump: "/home/omero/data/pg_dump"
+
+# OMERO data volume
+volume_data_omero: "/home/omero/data/OMERO"
+
+# OMERO ports
+host_port_omero1: 4063
+host_port_omero2: 4064

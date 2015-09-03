@@ -8,7 +8,7 @@
     - releases/{{ docker_tag }}
 
 - name: create self-signed SSL cert for Nginx
-  command: openssl req -new -nodes -x509 -subj "{{ cert_subject }}" -days 3650 -keyout {{ key_file }} -out {{ cert_file }} -extensions v3_ca 
+  command: openssl req -new -nodes -x509 -subj "{{ cert_subject }}" -days 3650 -keyout {{ key_file }} -out {{ cert_file }} -extensions v3_ca
   args:
     creates: "{{ cert_file }}"
 
@@ -16,15 +16,6 @@
   file: path={{ key_file }}
         mode=0600
 
-#- name: Add symlink from the nginx-proxy certs folder to the key file
-#  file: path={{ key_link }}
-#        src={{ key_file }}
-#        state=link
-
-#- name: Add symlinks from the nginx-proxy certs folder to the cert file
-#  file: path={{ cert_link }}
-#        src={{ cert_file }}
-#        state=link
 
 - name: clone deployment files shared between releases
   template: src={{ item }} dest={{ deploy_root }}/shared/{{ item }}
@@ -39,19 +30,20 @@
     - docker-compose.yml
 
 - name: edit hyldapConfig.xml
-  xml: 
+  xml:
     file: "{{ deploy_root }}/shared/hyldapConfig.xml"
     xpath: "/hyldapconfig"
     pretty_print: True
     add_children: "{{ allowed_groups }}"
- 
+  tags:
+    - update_allowed_groups
+
 - name: install init script
-  template: src=omero-init-script 
-            dest=/etc/init.d/{{ service_name }} 
-            backup=no 
+  template: src=omero-init-script
+            dest=/etc/init.d/{{ service_name }}
+            backup=no
             mode=0755
 
 
 #- name: start service
 #  service: name={{ service_name }} state=restarted
-

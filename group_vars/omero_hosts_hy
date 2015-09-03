@@ -11,3 +11,10 @@ allowed_groups:
     - group: { ldapname: 'uid=grp-A34550-kidney,ou=alma_workgroups,ou=groups,o=hy', omename: 'Sariola' }
 #    - group: { ldapname: '', omename: '' }
 #    - group: { ldapname: '', omename: '' }
+
+# ldap server
+ldap_host: "ldap-internal.it.helsinki.fi"
+ldap_port: 636
+
+# nginx certificate subject
+cert_subject: "/C=FI/ST=Uusimaa/L=Helsinki/O=University of Helsinki/CN={{ ansible_fqdn }}"
