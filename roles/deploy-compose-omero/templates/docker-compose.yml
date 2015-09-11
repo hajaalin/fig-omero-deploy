@@ -1,10 +1,10 @@
 initdb:
-  image: hajaalin/omero-initdb:{{ docker_tag }}
+  image: {{ docker_owner }}/omero-initdb:{{ docker_tag }}
   environment:
     OMERO_ROOT_PASSWORD:
 
 db:
-  image: hajaalin/omero-postgres:{{ docker_tag }}
+  image: {{ docker_owner }}/omero-postgres:{{ docker_tag }}
   environment:
     POSTGRES_PASSWORD:
     DB_PASSWORD_OMERO:
@@ -16,7 +16,7 @@ db:
    - initdb
 
 omero:
-  image: hajaalin/omero-hyldap:{{ docker_tag }}
+  image: {{ docker_owner }}/omero-hyldap:{{ docker_tag }}
   environment:
     DB_PASSWORD_OMERO:
     OMERO_TRUSTSTORE_PASSWORD:
@@ -24,7 +24,7 @@ omero:
     LDAP_PORT: "{{ ldap_port }}"
   links:
    - db
-  expose: 
+  expose:
    - "4064"
   volumes:
    - {{ deploy_root }}/shared/hyldapConfig.xml:/home/omero/hyldapConfig.xml
@@ -34,14 +34,14 @@ omero:
    - "{{ host_port_omero2 }}:4064"
 
 omeroweb:
-  image: hajaalin/omero-web:{{ docker_tag }}
+  image: {{ docker_owner }}/omero-web:{{ docker_tag }}
   links:
    - omero
   expose:
    - "4080"
 
 nginx:
-  image: hajaalin/omero-nginx:{{ docker_tag }}
+  image: {{ docker_owner }}/omero-nginx:{{ docker_tag }}
   links:
    - omeroweb
   volumes_from:
@@ -50,10 +50,9 @@ nginx:
    - {{ key_file }}:/etc/nginx/auth/server.key
    - {{ cert_file }}:/etc/nginx/auth/server.crt
   environment:
-    VIRTUAL_HOST: "{{ virtual_host }}" 
+    VIRTUAL_HOST: "{{ virtual_host }}"
     VIRTUAL_PROTO: "https"
     VIRTUAL_PORT: 443
 #  ports:
 #   - "8080:80"
 #   - "8443:443"
-

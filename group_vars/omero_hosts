@@ -1,6 +1,9 @@
 ---
 # vars file for omero_hosts
 
+# owner of image repository
+docker_owner: "hajaalin"
+
 app_name: "omero"
 compose_omero_tag: "ansible"
 
